@@ -36,5 +36,5 @@ Serial.println(filtVal);
 // #### Max/Min values
 // Left stick ( up / down ) ( 818/1650 )
 // Left stick ( left / right ) ( / )
-// Right stick ( up / down ) ( / )
-// Right stick ( left / right ) ( / )
+// Right stick ( up / down ) ( / ) // Pitch
+// Right stick ( left / right ) ( / ) // Yaw
