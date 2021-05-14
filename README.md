@@ -6,7 +6,7 @@ Repository for the FlyatBlyat project.
 Electrical information for the old and new hardware.
 
 ### Board color scheme
-Green - GND
+Lonely Green - GND
 
 <b>Servos</b>  
 Green - GND  
@@ -14,7 +14,9 @@ Blue - 5V
 Yellow (Blue in same order) - Signal 
 
 <b>ROBBE-BOI</b>  
-Blue, Purple, Gray - Data pins
+Blue - DR  
+Lila - SEI  
+Gray - HÖ
 
 ### Battery
 Old battery: 9.6V, 500 mAh  
