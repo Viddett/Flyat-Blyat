@@ -2,12 +2,13 @@
 
 // Constants
 const int PWMPIN_PITCH_IN = 19;
-const int PWMPIN_PITCH_OUT = 6;
+const int PWMPIN_PITCH_OUT = 5;
 const int PWMPIN_YAW_IN = 20;
-const int PWMPIN_YAW_OUT = 5;
+const int PWMPIN_YAW_OUT = 6;
 const int PWMPIN_MOTOR_IN = 18;
-const int PWMPIN_MOTOR_OUT = 9;
+const int PWMPIN_MOTOR_OUT = 11;
 
+const int DEG_MAX = 135;
 const int PWM_IN_MAX = 1650;
 const int PWM_IN_MIN = 818;
 
@@ -32,7 +33,6 @@ void setup() {
   pinMode( PWMPIN_MOTOR_IN, INPUT );
   pinMode( PWMPIN_MOTOR_OUT, OUTPUT );
   
-
   // Attach servos
   servoYaw.attach( PWMPIN_YAW_OUT );
   servoPitch.attach( PWMPIN_PITCH_OUT );
@@ -43,7 +43,7 @@ void setup() {
 
 
 int pwmIn2Deg( int pwmIn ) {
-  return ( pwmIn - PWM_IN_MIN ) / ( PWM_IN_MAX - PWM_IN_MIN ) * 180;
+  return ( pwmIn - PWM_IN_MIN ) / (float)( PWM_IN_MAX - PWM_IN_MIN ) * DEG_MAX;
 }
 
 
@@ -55,24 +55,20 @@ void loop() {
 
   // Convert to deg output
   degPitchOut = pwmIn2Deg( pwmPitchIn );
-  degYawOut = pwmIn2Deg( pwmYawIn );
+  degYawOut = DEG_MAX - pwmIn2Deg( pwmYawIn );
 
   // Output to servos
   servoPitch.write( degPitchOut );
-  servoPitch.write( degYawOut );
+  servoYaw.write( degYawOut );
   
   // Output to motor
-  pwmMotorOut = pwmMotorIn;
+  pwmMotorOut = 255 - ( ( pwmMotorIn - PWM_IN_MIN ) / (float)( PWM_IN_MAX - PWM_IN_MIN ) * 255 );
+  pwmMotorOut = pwmMotorOut < 40 ? 0 : pwmMotorOut;
+  pwmMotorOut = pwmMotorOut > 255 ? 255 : pwmMotorOut;
   analogWrite( PWMPIN_MOTOR_OUT, pwmMotorOut );
 
-  //Serial.println( pwmPitchIn );
-  //Serial.println( degPitchOut );
+  Serial.println( degPitchOut );
+  //Serial.print(" ");
+  //Serial.println( pwmMotorOut );
 
 }
-
-
-
-
-
-
-// delay(1000);
