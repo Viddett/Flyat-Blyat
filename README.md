@@ -8,17 +8,16 @@ Electrical information for the old and new hardware.
 ### Board color scheme
 Green - GND
 
-#### Servos
-Green - GND
-Blue - 5V 
+<b>Servos</b>  
+Green - GND  
+Blue - 5V   
 Yellow (Blue in same order) - Signal 
 
-#### ROBBE-BOI
+<b>ROBBE-BOI</b>  
 Blue, Purple, Gray - Data pins
 
 ### Battery
-Old battery: 9.6V, 500 mAh
-
+Old battery: 9.6V, 500 mAh  
 New battery: 11.1V, 3000 mAh
 
 ### Servos
