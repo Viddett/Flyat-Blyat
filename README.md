@@ -2,9 +2,19 @@
 
 Repository for the FlyatBlyat project.
 
-
 ## Electrical
 Electrical information for the old and new hardware.
+
+### Board color scheme
+Green - GND
+
+#### Servos
+Green - GND
+Blue - 5V 
+Yellow (Blue in same order) - Signal 
+
+#### ROBBE-BOI
+Blue, Purple, Gray - Data pins
 
 ### Battery
 Old battery: 9.6V, 500 mAh
