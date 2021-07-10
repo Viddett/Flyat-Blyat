@@ -19,6 +19,7 @@ int degPitchOut;
 int degYawOut;
 Servo servoPitch;
 Servo servoYaw;
+Servo servoEsc;
 
 // Motor variables
 int pwmMotorIn;
@@ -31,11 +32,13 @@ void setup() {
   pinMode( PWMPIN_YAW_IN, INPUT );
   pinMode( PWMPIN_PITCH_IN, INPUT );
   pinMode( PWMPIN_MOTOR_IN, INPUT );
-  pinMode( PWMPIN_MOTOR_OUT, OUTPUT );
+  //pinMode( PWMPIN_MOTOR_OUT, OUTPUT );
   
   // Attach servos
   servoYaw.attach( PWMPIN_YAW_OUT );
   servoPitch.attach( PWMPIN_PITCH_OUT );
+  servoEsc.attach( PWMPIN_MOTOR_OUT );
+  delay(5000);
 
 
   Serial.begin( 115200 );
@@ -65,10 +68,15 @@ void loop() {
   pwmMotorOut = 255 - ( ( pwmMotorIn - PWM_IN_MIN ) / (float)( PWM_IN_MAX - PWM_IN_MIN ) * 255 );
   pwmMotorOut = pwmMotorOut < 40 ? 0 : pwmMotorOut;
   pwmMotorOut = pwmMotorOut > 255 ? 255 : pwmMotorOut;
-  analogWrite( PWMPIN_MOTOR_OUT, pwmMotorOut );
+  //analogWrite( PWMPIN_MOTOR_OUT, pwmMotorOut );
+  int pwmMotorOutEsc = (pwmMotorOut * 28 / 255)  + 90;
+  servoEsc.write( pwmMotorOutEsc );
 
-  Serial.println( degPitchOut );
+  
+
+  //Serial.println( degPitchOut );
   //Serial.print(" ");
-  //Serial.println( pwmMotorOut );
+  //Serial.println( (float)pwmMotorOut * (float)(30/255) );
+  Serial.println( pwmMotorOutEsc );
 
 }
