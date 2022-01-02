@@ -2,53 +2,82 @@
 #include <Arduino_FreeRTOS.h>
 #include <semphr.h>
 
-#define radio_Ts 1000
-#define servo_Ts 500
+#include "imu.cpp"
+#include "radio.cpp"
+#include "fbservo.cpp"
+#include "control.cpp"
 
+#define RADIO_TS 1000
+#define CTRL_TS 500
 
-SemaphoreHandle_t setpoints_mutex;
+#define TASK_STACK_DPTH 128
+#define RADIO_PRIO 4
+#define CTRL_PRIO 5 
+// Task priority (HIGH = VIP, Low = pleb)
 
-volatile float setpoint_pitch;
+SemaphoreHandle_t msg_mutex;
+RadioMsg current_msg;
 
 void setup() {
 
-  Serial.begin(9600);
-  Serial.println("LETSGO");
+      current_msg.seq = -1;
 
-  setpoints_mutex = xSemaphoreCreateMutex();
-  if (setpoints_mutex != NULL) {
-    Serial.println("Mutex created");
-  }
+      Serial.begin(9600);
+      Serial.println("LETSGO");
 
-  /**
-     Create tasks
-  */
-  xTaskCreate(setpoint_from_radio, // Task function
-              "RadioTask", // Task name for humans
-              128,  // stack depth
-              1000, // Task parameter
-              1, // Task priority (HIGH = VIP, Low = pleb)
-              NULL);
+      setpoints_mutex = xSemaphoreCreateMutex();
 
-  xTaskCreate(servo_ctrl, "ServoTask", 128, 1000, 2, NULL);
+
+      /**
+       Create tasks
+      */
+      xTaskCreate(setpointFromRadio, "RadioTask", TASK_STACK_DPTH,nullptr, RADIO_PRIO, NULL);
+      xTaskCreate(attitudeCtrl, "CtrlTask", TASK_STACK_DPTH, nullptr, CTRL_PRIO, NULL);
 
 }
 
 void loop() {}
 
-void setpoint_from_radio(void *pvParameters){
-  //xSemaphoreGive(mutex);
+void setpointFromRadio(void *pvParameters){
+
+      Radio radio = new Radio();
       while(true){
-            Serial.println("radio boi");
-            vTaskDelay(radio_Ts / portTICK_PERIOD_MS);
+            
+            if(radio.msg_avaliable()){
+                  xSemaphoreTake(msg_mutex,portMAX_DELAY);
+                  radio.read_msg(&current_msg);
+                  xSemaphoreGive(msg_mutex);
+            }
+
+            vTaskDelay(RADIO_TS / portTICK_PERIOD_MS);
       }
       
 }
 
-void servo_ctrl(void *pvParameters){
+void attitudeCtrl(void *pvParameters){
+      AttCtrl ctrl = new AttCtrl();
+      IMU imu = new IMU();
+      ImuMeas meas;
+      RadioMsg internalMsg;
+      
+
+      FBServo ailLeft = new FBServo(1);
+      FBServo ailRight = new FBServo(2);
+      FBServo prop = new FBServo(3);
+
+      Control ctrl = new Control(&ailLeft, &ailRight, &prop);
+
       while(true){
-            Serial.println("Servoboi");
-            vTaskDelay(servo_Ts / portTICK_PERIOD_MS);
+            
+            imu.read(&meas);
+            if(xSemaphoreTake(msg_mutex,0) == pdTRUE){
+                  internalMsg = current_msg;
+                  xSemaphoreGive(msg_mutex);
+            }
+            
+            ctrl.step(internalMsg,meas);
+
+            vTaskDelay(CTRL_TS / portTICK_PERIOD_MS);
       }
 
 }

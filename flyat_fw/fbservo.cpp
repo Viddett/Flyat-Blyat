@@ -1,9 +1,11 @@
+#ifndef FBSERO
+#define FBSERO
 
 /*
  Wrapper-class for each servo for abstraction.
  Also suppports input/output scaling.
 */
-class Servo{
+class FBServo{
 
     private: 
         int _servo_pin;
@@ -20,7 +22,7 @@ class Servo{
 
     public:
         // Default Constructor
-        Servo(int pin){
+        FBServo(int pin){
             _servo_pin = pin;
             _output_offset = 0;
             _output_scale = 1;
@@ -28,7 +30,7 @@ class Servo{
             config_servo_pin(pin);
         }
 
-        Servo(int pin, float output_offset, float output_scale){
+        FBServo(int pin, float output_offset, float output_scale){
             _servo_pin = pin;
 
             _output_offset = output_offset;
@@ -52,3 +54,4 @@ class Servo{
 
 
 
+#endif

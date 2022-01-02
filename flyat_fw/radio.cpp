@@ -1,5 +1,8 @@
+#ifndef FBRADIO
+#define FBRADIO
 
-struct radio_msg{
+
+struct RadioMsg{
     float pitch;
     float roll;
     float speed;
@@ -19,7 +22,7 @@ class Radio{
             return 0;
         }
 
-        void read_msg(radio_msg * msg){
+        void read_msg(RadioMsg * msg){
             msg->mode=1;
             //TODO
         }
@@ -29,4 +32,4 @@ class Radio{
 
 
 
-
+#endif

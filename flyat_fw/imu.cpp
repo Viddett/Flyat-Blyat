@@ -1,5 +1,8 @@
+#ifndef FBIMU
+#define FBIMU
 
-struct imu_meas{
+
+struct ImuMeas{
     float pitch_rate;
     float roll_rate;
     float yaw_rate;
@@ -14,8 +17,9 @@ class IMU{
         //TODO
     public:
         
-        void read(imu_meas * meas){
+        void read(ImuMeas * meas){
             //TODO
         }
 };
 
+#endif
