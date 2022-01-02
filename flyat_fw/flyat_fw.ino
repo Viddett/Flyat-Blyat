@@ -25,7 +25,7 @@ void setup() {
       Serial.begin(9600);
       Serial.println("LETSGO");
 
-      setpoints_mutex = xSemaphoreCreateMutex();
+      msg_mutex = xSemaphoreCreateMutex();
 
 
       /**
@@ -40,7 +40,7 @@ void loop() {}
 
 void setpointFromRadio(void *pvParameters){
 
-      Radio radio = new Radio();
+      Radio radio = Radio();
       while(true){
             
             if(radio.msg_avaliable()){
@@ -55,17 +55,15 @@ void setpointFromRadio(void *pvParameters){
 }
 
 void attitudeCtrl(void *pvParameters){
-      AttCtrl ctrl = new AttCtrl();
-      IMU imu = new IMU();
+      IMU imu = IMU();
       ImuMeas meas;
       RadioMsg internalMsg;
-      
 
-      FBServo ailLeft = new FBServo(1);
-      FBServo ailRight = new FBServo(2);
-      FBServo prop = new FBServo(3);
+      FBServo ailLeft = FBServo(1);
+      FBServo ailRight = FBServo(2);
+      FBServo prop = FBServo(3);
 
-      Control ctrl = new Control(&ailLeft, &ailRight, &prop);
+      Control ctrl = Control(&ailLeft, &ailRight, &prop);
 
       while(true){
             

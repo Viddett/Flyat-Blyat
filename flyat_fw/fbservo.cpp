@@ -1,5 +1,5 @@
-#ifndef FBSERO
-#define FBSERO
+#ifndef FBSERVO
+#define FBSERVO
 
 /*
  Wrapper-class for each servo for abstraction.

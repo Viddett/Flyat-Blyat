@@ -2,6 +2,7 @@
 #include "radio.cpp"
 #include "fbservo.cpp"
 
+
 class Control{
 
     private:
@@ -10,12 +11,15 @@ class Control{
         FBServo* _aileronRight;
         FBServo* _prop;
 
+        
+
     public:
 
         Control(FBServo* leftAil, FBServo* rightAil, FBServo* prop){
             _aileronLeft = leftAil;
             _aileronRight = rightAil;
             _prop = prop;
+
         }
 
 
