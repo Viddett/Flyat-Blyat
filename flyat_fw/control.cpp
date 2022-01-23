@@ -5,9 +5,10 @@
 #define MIN_PID_OUTPUT = -0.5;
 #define MAX_PID_OUTPUT = 0.5;
 #define PID_TO_SERVO_OFFSET = 0.5;
+#define MAX_SERVO_INPUT = 1;
+#define MIN_SERVO_INPUT = 0;
 #define DT = 20.0;
-#define ROLL_FACTOR = 0.5;
-#define PITCH_FACTOR = 0.5;
+#define ROLL_PITCH_FACTOR = 0.5;
 
 
 class Control{
@@ -30,7 +31,17 @@ class Control{
 
             double denom = sqrtf(powf(normAcc[1],2) + powf(normAcc[2],2));
             *pitch = atan2f(-normAcc[0],denom)*180.0/M_PI;
-        }        
+        }  
+
+        double getServoInput(double summedControlSignal){
+            if (summedControlSignal > MAX_SERVO_INPUT){
+                return MAX_SERVO_INPUT;
+            } else if (summedControlSignal < MIN_SERVO_INPUT){
+                return MIN_SERVO_INPUT;
+            } else {
+                return summedControlSignal;
+            }
+        }      
 
     public:
 
@@ -69,10 +80,12 @@ class Control{
             //full pitch up --> 0 / 0
             //full pitch down --> 1 / 1
           
-            double pitchVal = pitchPid.calculate(wantedPitch, pitch) + PID_TO_SERVO_OFFSET;
-            double rollVal = rollPid.calculate(wantedRoll, roll);
-            _aileronLeft.set(PITCH_FACTOR * pitchVal + ROLL_FACTOR * abs(rollVal - PID_TO_SERVO_OFFSET));  
-            _aileronRight.set(PITCH_FACTOR * pitchVall + ROLL_FACTOR * rollVal + PID_TO_SERVO_OFFSET); 
+            double pitchVal = (ROLL_PITCH_FACTOR * pitchPid.calculate(wantedPitch, pitch)) + PID_TO_SERVO_OFFSET
+            double rollVal = (1-ROLL_PITCH_FACTOR) * rollPid.calculate(wantedRoll, roll);
+            double leftSignal = getServoInput(pitchVal + abs(rollVal - PID_TO_SERVO_OFFSET))
+            double rightSignal = getServoInput(pitchVal + rollVal + PID_TO_SERVO_OFFSET));
+             _aileronLeft.set(leftSignal);  
+            _aileronRight.set(rightSignal);
             // _prop.set() 
         }     
 };
