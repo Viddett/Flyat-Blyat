@@ -1,6 +1,7 @@
 
 #include <Arduino_FreeRTOS.h>
 #include <semphr.h>
+#include <SPI.h>
 
 #include "imu.cpp"
 #include "radio.cpp"
