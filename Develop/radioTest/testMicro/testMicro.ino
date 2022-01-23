@@ -32,10 +32,7 @@ bool role = true;  // true = TX role, false = RX role
 // For this example, we'll be using a payload containing
 // a single float number that will be incremented
 // on every successful transmission
-float payload = 0.0;
-float p = 2;
-int pos = 2;
-uint8_t incomingByte[ 3 ] {0,0,0};
+float incomingByte[ 3 ] {0,0,0};
 void setup() {
 
   Serial.begin(9600);
@@ -49,17 +46,18 @@ void setup() {
   // Set the PA Level low to try preventing power supply related problems
   // because these examples are likely run with nodes in close proximity to
   // each other.
-  radio.setPALevel(RF24_PA_MAX);  // RF24_PA_MAX is default.
+  radio.setPALevel(RF24_PA_MIN);  // RF24_PA_MAX is default.
 
   // save on transmission time by setting the radio to only transmit the
   // number of bytes we need to transmit a float
+  //radio.setPayloadSize(sizeof(incomingByte)); // float datatype occupies 4 bytes
   radio.setPayloadSize(sizeof(incomingByte)); // float datatype occupies 4 bytes
 
   // set the TX address of the RX node into the TX pipe
   radio.openWritingPipe(address[radioNumber]);     // always uses pipe 0
 
   // set the RX address of the TX node into a RX pipe
-  radio.openReadingPipe(1, address[!radioNumber]); // using pipe 1
+  //radio.openReadingPipe(1, address[!radioNumber]); // using pipe 1
 
   // additional setup specific to the node's role
   if (role) {
@@ -76,15 +74,26 @@ void setup() {
 } // setup
 
 void loop() {
-  if (Serial.available() > 0) {
-  Serial.readBytes(incomingByte, 3);
-  incomingByte[0] = (float)((incomingByte[0] - 10)*9 + 90);
-  incomingByte[1] = (float)((incomingByte[1] - 10)*9 + 90);
-  incomingByte[2] = (float)((incomingByte[2] - 10)*9 + 90);
+  if (Serial.available() >= 12) {
+  byte btArr[sizeof(incomingByte)];
+  float tst = 10;
+  float tst2 = 10;
+  float tst3 = 10;
+  Serial.readBytes(btArr, sizeof(incomingByte));
+  float* glenn;
+  
+  glenn = (float*) btArr;
+  
+  tst = *glenn;
+  tst2 = *(glenn+1);
+  tst3 = *(glenn+2);
+
+  incomingByte[0] = tst;
+  incomingByte[1] = tst2;
+  incomingByte[2] = tst3;
+  
+  radio.write(incomingByte , sizeof(incomingByte));
   }
-  //radio.write(&pos, sizeof(float));      // transmit & save the report
-  radio.write(incomingByte, sizeof(incomingByte));
-  //delay(100);
   
 
 } // loop

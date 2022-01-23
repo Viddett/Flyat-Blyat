@@ -2,8 +2,9 @@ from inputs import get_gamepad
 import math
 import threading
 import serial
+import struct
 import time
-ser = serial.Serial('COM8', 9600)
+ser = serial.Serial('COM7', 9600)
 
 class XboxController(object):
     MAX_TRIG_VAL = math.pow(2, 8)
@@ -96,18 +97,15 @@ if __name__ == '__main__':
     joy = XboxController()
     while True:
         x, y, z = joy.read()
-        x = int(round( 10 + x * 10 ))
-        y = int(round( 10 + y * 10 ))
-        z = int(round( z * 10 ))
-        print(x, y, z)
-        print(type(x.to_bytes(1, 'big')))
-        ##ser.write(bytes(str(x)+'\n','utf-8'))
-        list = bytearray([x,y,z])
-        #ser.write(x.to_bytes(2, 'big'))
-        ser.write(list)
+        # pitch, roll, speed, mode, seq (float,float,float,int,int)
+        x = float(x)
+        y = float(y)
+        z = float(z)
+        #print(x, y, z)
+        pkt = bytearray(struct.pack('fff', x, y, z))
+        ser.write( pkt )
 
-        #time.sleep(0.1)
-        #print(ser.read(1))
+        time.sleep(0.025)
 
 
 
