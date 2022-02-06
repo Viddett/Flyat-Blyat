@@ -48,7 +48,6 @@ void setup() {
 
 
       Serial.println("LETSGO");
-      Serial.println(sizeof(GLENN));
 
       msg_mutex = xSemaphoreCreateMutex();
 
