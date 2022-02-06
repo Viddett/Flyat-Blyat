@@ -20,7 +20,7 @@
 #define CTRL_PRIO 5 
 #define SERVO_PRIO 10
 
-#define servo_pin 9
+#define servo_pin 10
 
 SemaphoreHandle_t msg_mutex;
 RadioMsg current_msg;
@@ -74,7 +74,7 @@ void setpointFromRadio(void *pvParameters){
                   nr_radio_msgs += 1;
                   radio.read_msg(&current_msg);
                   xSemaphoreGive(msg_mutex);
-                  Serial.print("RADIO MSG: ");
+                  //Serial.print("RADIO MSG: ");
             }
             
             //Serial.println("RADIO LOOP");
@@ -83,7 +83,7 @@ void setpointFromRadio(void *pvParameters){
       
 }
 
-/*
+
 void servo_task(void *pvParameters){
       pinMode(servo_pin, OUTPUT);
 
@@ -107,7 +107,7 @@ void servo_task(void *pvParameters){
       }
 
 }
-*/
+
 void attitudeCtrl(void *pvParameters){
       
       IMU imu = IMU();
@@ -127,7 +127,7 @@ void attitudeCtrl(void *pvParameters){
                   internalMsg = current_msg;
                   xSemaphoreGive(msg_mutex);
             }
-            //servo.write((internalMsg.roll + 1)*90.0);
+            servo.write((internalMsg.roll + 1)*90.0);
             /*
             Serial.print(nr_radio_msgs);
             nr_radio_msgs = 0 ;
