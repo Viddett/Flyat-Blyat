@@ -48,7 +48,7 @@ void setup() {
 
 
       Serial.println("LETSGO");
-      Serial.println(sizeof(GLENN));
+      Serial.println(sizeof(RadioMsg));
 
       msg_mutex = xSemaphoreCreateMutex();
 
@@ -128,16 +128,22 @@ void attitudeCtrl(void *pvParameters){
                   xSemaphoreGive(msg_mutex);
             }
             servo.write((internalMsg.roll + 1)*90.0);
-            /*
-            Serial.print(nr_radio_msgs);
+            
+            //Serial.print(nr_radio_msgs);
             nr_radio_msgs = 0 ;
             Serial.print(" ");
             Serial.print(internalMsg.pitch);
             Serial.print(" ");
             Serial.print(internalMsg.roll);
             Serial.print(" ");
-            Serial.println(internalMsg.speed);
-*/
+            Serial.print(internalMsg.speed);
+			
+			Serial.print(" ");
+            Serial.print(internalMsg.mode);
+			
+			Serial.print(" ");
+            Serial.println(internalMsg.seq);
+
             //ctrl.step(internalMsg,meas);
             
             //Serial.println("Ctrl LOOP");

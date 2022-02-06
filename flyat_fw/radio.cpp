@@ -5,13 +5,13 @@
 #include "RF24.h"
 
 
-struct RadioMsg{
+typedef struct{
     float pitch;
     float roll;
     float speed;
-    //unsigned int mode;
-    //unsigned int seq;
-};
+    int mode;
+    int seq;
+} RadioMsg;
 
 
 class Radio{
@@ -20,7 +20,7 @@ class Radio{
         //TODO
         RF24 _radio = RF24(11, 12); // using pin 7 for the CE pin, and pin 8 for the CSN pin
 
-        float rec_buffer[3];
+        //float rec_buffer[3];
 
         void setup() {            
             if(_radio.begin()){
@@ -35,7 +35,7 @@ class Radio{
             //uint8_t payload[3] = {0,0,0}; // 
             //radio.setPayloadSize(sizeof(payload)); // float datatype occupies 4 bytes
             _radio.setPALevel(RF24_PA_MIN);
-            _radio.setPayloadSize(sizeof(rec_buffer)); // float datatype occupies 4 bytes
+            _radio.setPayloadSize(sizeof(RadioMsg)); // float datatype occupies 4 bytes
             //_radio.openWritingPipe(address[radioNumber]);     // always uses pipe 0
             _radio.openReadingPipe(1, address[!radioNumber]);
             _radio.startListening();
@@ -57,14 +57,13 @@ class Radio{
             //uint8_t* msgBytes;
             //uint8_t bytes = _radio.getPayloadSize();
 
-			_radio.read(rec_buffer, sizeof(rec_buffer));
+			//_radio.read(rec_buffer, sizeof(rec_buffer));
 			
-			msg->roll = rec_buffer[0];
-			msg->pitch = rec_buffer[1];
-			msg->speed = rec_buffer[2];
+			//msg->roll = rec_buffer[0];
+			//msg->pitch = rec_buffer[1];
+			//msg->speed = rec_buffer[2];
 			
-            //_radio.read(msgBytes, bytes);
-            //*msg = *((RadioMsg*)msgBytes);
+			_radio.read(msg, sizeof(RadioMsg));
             
         }
 
