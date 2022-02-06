@@ -6,7 +6,7 @@
 #include "imu.cpp"
 #include "radio.cpp"
 #include "fbservo.cpp"
-#include "control.cpp"
+//#include "control.cpp"
 
 #include <Servo.h>
 
@@ -74,7 +74,7 @@ void setpointFromRadio(void *pvParameters){
                   nr_radio_msgs += 1;
                   radio.read_msg(&current_msg);
                   xSemaphoreGive(msg_mutex);
-                  //Serial.print("RADIO MSG: ");
+                  Serial.print("RADIO MSG: ");
             }
             
             //Serial.println("RADIO LOOP");
@@ -109,16 +109,17 @@ void servo_task(void *pvParameters){
 }
 */
 void attitudeCtrl(void *pvParameters){
+      
       IMU imu = IMU();
       ImuMeas meas;
       RadioMsg internalMsg;
-
+      /*
       FBServo ailLeft = FBServo(1);
       FBServo ailRight = FBServo(2);
       FBServo prop = FBServo(3);
 
       Control ctrl = Control(&ailLeft, &ailRight, &prop);
-
+      */
       while(true){
             
             //imu.read(&meas);
@@ -126,7 +127,7 @@ void attitudeCtrl(void *pvParameters){
                   internalMsg = current_msg;
                   xSemaphoreGive(msg_mutex);
             }
-            servo.write((internalMsg.roll + 1)*90.0);
+            //servo.write((internalMsg.roll + 1)*90.0);
             /*
             Serial.print(nr_radio_msgs);
             nr_radio_msgs = 0 ;

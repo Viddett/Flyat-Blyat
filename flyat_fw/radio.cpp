@@ -9,8 +9,8 @@ struct RadioMsg{
     float pitch;
     float roll;
     float speed;
-    unsigned int mode;
-    unsigned int seq;
+    //unsigned int mode;
+    //unsigned int seq;
 };
 
 
@@ -18,19 +18,28 @@ class Radio{
 
     private:
         //TODO
-        RF24 _radio = RF24(7, 8); // using pin 7 for the CE pin, and pin 8 for the CSN pin
+        RF24 _radio = RF24(11, 12); // using pin 7 for the CE pin, and pin 8 for the CSN pin
+
+        float rec_buffer[3];
 
         void setup() {            
-            
+            if(_radio.begin()){
+                Serial.println("RADIO OK");
+            }
+                else{
+                    Serial.println("radio failed");
+            }
             uint8_t address[][6] = {"1Node", "2Node"};
             bool radioNumber = 1; // 0 uses address[0] to transmit, 1 uses address[1] to transmit
             //bool role = false;  // true = TX role, false = RX role
             //uint8_t payload[3] = {0,0,0}; // 
             //radio.setPayloadSize(sizeof(payload)); // float datatype occupies 4 bytes
-            _radio.setPayloadSize(sizeof(RadioMsg)); // float datatype occupies 4 bytes
-            _radio.openWritingPipe(address[radioNumber]);     // always uses pipe 0
+            _radio.setPALevel(RF24_PA_MIN);
+            _radio.setPayloadSize(sizeof(rec_buffer)); // float datatype occupies 4 bytes
+            //_radio.openWritingPipe(address[radioNumber]);     // always uses pipe 0
             _radio.openReadingPipe(1, address[!radioNumber]);
             _radio.startListening();
+			
     }
     public:
 
@@ -41,17 +50,22 @@ class Radio{
         bool msg_avaliable(){
             // TODO
             uint8_t pipe = 0;
-            return _radio.available(&pipe) && _radio.getPayloadSize() == sizeof(RadioMsg);
+            return _radio.available(&pipe);// && _radio.getPayloadSize() == sizeof(RadioMsg);
         }
 
         void read_msg(RadioMsg * msg){
-            uint8_t* msgBytes;
-            uint8_t bytes = _radio.getPayloadSize();
-            _radio.read(&msgBytes, bytes);
-            *msg = *((RadioMsg*)msgBytes);
+            //uint8_t* msgBytes;
+            //uint8_t bytes = _radio.getPayloadSize();
+
+			_radio.read(rec_buffer, sizeof(rec_buffer));
+			
+			msg->roll = rec_buffer[0];
+			msg->pitch = rec_buffer[1];
+			msg->speed = rec_buffer[2];
+			
+            //_radio.read(msgBytes, bytes);
+            //*msg = *((RadioMsg*)msgBytes);
             
-            msg->mode=1;
-            //TODO
         }
 
 };
