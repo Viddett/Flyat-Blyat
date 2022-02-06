@@ -2,13 +2,25 @@
 #include "printf.h"
 #include "RF24.h"
 
+// Struct to transmit
+typedef struct {
+  float pitch;
+  float roll;
+  float speed;
+  int mode;
+  int seq;
+} RadioMsg;
+
 // Radio parameters
 RF24 radio(7, 8); // using pin 7 for the CE pin, and pin 8 for the CSN pin
 uint8_t address[][6] = {"1Node", "2Node"}; // Let these addresses be used for the pair
 bool radioNumber = 0; // 0 uses address[0] to transmit, 1 uses address[1] to transmit
 bool role = true;  // true = TX role, false = RX role
-float transmitData[ 3 ] {0,0,0};
-int transmitSize = sizeof(transmitData);
+//float transmitData[ 3 ] {0,0,0};
+RadioMsg transmitData;
+int transmitSize = sizeof(RadioMsg);
+
+unsigned long lastTransmitTime { 0 };
 
 void setup() {
   Serial.begin(9600);
@@ -30,23 +42,21 @@ void setup() {
 } // setup
 
 void loop() {
-  if (Serial.available() >= transmitSize) {
+  if (millis() - lastTransmitTime >= 1000) {
+    int nBytes = Serial.available();
+    for (int i = 0; i < nBytes; i++) {
+      Serial.read();
+    }
+    lastTransmitTime = millis();
+  }
+  else if (Serial.available() >= transmitSize) {
     byte receiveData[transmitSize];
-    float tst = -1;
-    float tst2 = -1;
-    float tst3 = -1;
-    Serial.readBytes(receiveData, transmitSize);
-    float* tmpData;
-    tmpData = (float*) receiveData;
     
-    tst = *tmpData;
-    tst2 = *(tmpData+1);
-    tst3 = *(tmpData+2);
-  
-    transmitData[0] = tst;
-    transmitData[1] = tst2;
-    transmitData[2] = tst3;
-    
-    radio.write(transmitData , transmitSize);
+    char* req;
+    req = (char*)&transmitData;
+    Serial.readBytes(req, transmitSize);
+   
+    radio.write(&transmitData , transmitSize);
+    lastTransmitTime = millis();
   }
 } // loop

@@ -38,14 +38,15 @@ class XboxController(object):
         self._monitor_thread.start()
 
     def read(self): # return the buttons/triggers that you care about in this methode
-        x = self.LeftJoystickX
-        y = self.LeftJoystickY
-        z = self.RightTrigger
+        roll = self.LeftJoystickX
+        pitch = self.LeftJoystickY
+        speed = self.RightTrigger
+
         #a = self.A
         #b = self.X # b=1, x=2
         #rb = self.RightBumper
         #return [x, y, a, b, rb]
-        return x, y, z
+        return roll, pitch, speed
 
     def _monitor_controller(self):
         while True:
@@ -96,13 +97,18 @@ class XboxController(object):
 if __name__ == '__main__':
     joy = XboxController()
     while True:
-        x, y, z = joy.read()
+        roll, pitch, speed = joy.read()
         # pitch, roll, speed, mode, seq (float,float,float,int,int)
-        x = float(x)
-        y = float(y)
-        z = float(z)
+        roll = float(roll)
+        pitch = float(pitch)
+        speed = float(speed)
+        mode = 1337
+        seq = 1338
+
+        # WARNING: mode and seq is 2 bytes each (short) CHECK OVERFLOW!
+
         #print(x, y, z)
-        pkt = bytearray(struct.pack('fff', x, y, z))
+        pkt = bytearray(struct.pack('fffhh', roll, pitch, speed, mode, seq))
         ser.write( pkt )
 
         time.sleep(0.025)
