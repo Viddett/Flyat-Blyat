@@ -30,7 +30,7 @@ Item {
         }
         handle: Rectangle {
             id: sliderHandle
-            x: slider.horizontalCenter
+            x: slider.width / 2
             anchors.horizontalCenter: slider.horizontalCenter
             y: slider.visualPosition * (slider.availableHeight)
             width: slider.width
