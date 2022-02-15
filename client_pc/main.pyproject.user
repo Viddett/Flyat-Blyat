@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 6.0.2, 2022-02-12T11:10:52. -->
+<!-- Written by QtCreator 6.0.2, 2022-02-13T21:14:22. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -85,6 +85,9 @@
     <valuelist type="QVariantList" key="ClangTools.SuppressedDiagnostics"/>
     <value type="bool" key="ClangTools.UseGlobalSettings">true</value>
    </valuemap>
+   <valuemap type="QVariantMap" key="CppEditor.QuickFix">
+    <value type="bool" key="UseGlobalSettings">true</value>
+   </valuemap>
   </valuemap>
  </data>
  <data>
@@ -118,16 +121,16 @@
     <valuelist type="QVariantList" key="CustomOutputParsers"/>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">G:/My Drive/tmp/main.py</value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration.G:/My Drive/tmp/main.py</value>
-    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">G:/My Drive/tmp/main.py</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">C:/Users/Nisse/Documents/GitHub/Flyat-Blyat/client_pc/main.py</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration.C:/Users/Nisse/Documents/GitHub/Flyat-Blyat/client_pc/main.py</value>
+    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">C:/Users/Nisse/Documents/GitHub/Flyat-Blyat/client_pc/main.py</value>
     <value type="QString" key="PythonEditor.RunConfiguation.Interpreter">{187f74ef-7211-4f76-8553-8a19f3389266}</value>
-    <value type="QString" key="PythonEditor.RunConfiguation.Script">G:\My Drive\tmp\main.py</value>
+    <value type="QString" key="PythonEditor.RunConfiguation.Script">C:\Users\Nisse\Documents\GitHub\Flyat-Blyat\client_pc\main.py</value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
-    <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
+    <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">G:/My Drive/tmp</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">C:/Users/Nisse/Documents/GitHub/Flyat-Blyat/client_pc</value>
    </valuemap>
    <value type="qlonglong" key="ProjectExplorer.Target.RunConfigurationCount">1</value>
   </valuemap>
