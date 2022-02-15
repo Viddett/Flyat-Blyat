@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 import "Widgets"
 
 
+
 ApplicationWindow {
     id: root
     visible: true
@@ -15,6 +16,16 @@ ApplicationWindow {
     maximumHeight: fixedHeight
     minimumHeight: fixedHeight
     title: "FlyatBlyat Control Centre"
+
+    property QtObject backend
+    Connections {
+        target: backend
+        function onControlUpdate(pitch, roll, speed) {
+            pitchGauge.value = pitch
+            rollGauge.value = roll
+            powerGauge.value = speed
+        }
+    }
 
     Rectangle { id: background
         anchors.fill: parent
@@ -59,8 +70,9 @@ ApplicationWindow {
 
         GaugeSlider {
             id: pitchGauge
-            value: dial.value
             text: "Pitch"
+            from: -1
+            to: 1
             anchors.left: parent.left
             anchors.top: parent.top
             anchors.bottom: parent.bottom
@@ -69,8 +81,9 @@ ApplicationWindow {
         }
         GaugeSlider {
             id: rollGauge
-            value: dial.value
             text: "Roll"
+            from: -1
+            to: 1
             anchors.left: pitchGauge.right
             anchors.top: parent.top
             anchors.bottom: parent.bottom
@@ -79,24 +92,14 @@ ApplicationWindow {
         }
         GaugeSlider {
             id: powerGauge
-            value: dial.value
             text: "Power"
+            from: 0
+            to: 1
             anchors.left: rollGauge.right
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             anchors.margins: 30
             width: 30
-        }
-
-
-        Dial {
-            id: dial
-            from: 0
-            to: 1
-            anchors.right: parent.right
-            anchors.rightMargin: 30
-            anchors.verticalCenter: parent.verticalCenter
-            width: parent.width / 8
         }
     }
 }

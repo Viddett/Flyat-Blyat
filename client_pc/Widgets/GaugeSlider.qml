@@ -5,6 +5,8 @@ Item {
     id: root
     property alias value: slider.value
     property alias text: centerText.text
+    property alias from: slider.from
+    property alias to: slider.to
 
     Slider {
         id: slider
@@ -19,14 +21,12 @@ Item {
             border.color: "white"
             radius: 5
             opacity: 0.5
-
             Rectangle {
                 anchors.bottom: parent.bottom
                 width: parent.width
-                height: slider.value * sliderBg.height
+                height: parent.height - sliderHandle.y
                 color: "#004d77"
             }
-
         }
         handle: Rectangle {
             id: sliderHandle

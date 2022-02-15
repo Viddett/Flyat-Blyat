@@ -3,7 +3,7 @@ from mainloop import mainloop
 
 from PyQt5.QtGui import QGuiApplication
 from PyQt5.QtQml import QQmlApplicationEngine
-from PyQt5.QtCore import *
+#from PyQt5.QtCore import QObject
 
 
 # Setup gui
@@ -12,9 +12,10 @@ engine = QQmlApplicationEngine()
 engine.quit.connect(app.quit)
 engine.load('main.qml')
 
+
 # Start main loop
-mainloop = mainloop()
+backend = mainloop()
+engine.rootObjects()[0].setProperty('backend', backend)
 
 # Start gui
 sys.exit(app.exec())
-
