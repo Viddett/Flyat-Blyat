@@ -1,6 +1,7 @@
 from inputs import get_gamepad
 import math
 import threading
+import time
 
 
 class XboxController(object):

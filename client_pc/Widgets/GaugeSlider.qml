@@ -4,7 +4,7 @@ import QtQuick.Controls 2.15
 Item {
     id: root
     property alias value: slider.value
-    property alias text: centerText.text
+    property string text: ""
     property alias from: slider.from
     property alias to: slider.to
 
@@ -34,13 +34,14 @@ Item {
             anchors.horizontalCenter: slider.horizontalCenter
             y: slider.visualPosition * (slider.availableHeight)
             width: slider.width
-            height: width
+            height: width / 3
             radius: width / 3
             opacity: 0.75
         }
 
         Text {
             id: centerText
+            text: root.text + " " + parseInt(100*slider.value) + "%"
             anchors.centerIn: parent
             color: "#004d77"
             font.pixelSize: sliderBg.width - 1

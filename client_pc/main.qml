@@ -1,8 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import "Widgets"
-
-
+import "Gfx"
 
 ApplicationWindow {
     id: root
@@ -18,12 +17,19 @@ ApplicationWindow {
     title: "FlyatBlyat Control Centre"
 
     property QtObject backend
+
     Connections {
         target: backend
         function onControlUpdate(pitch, roll, speed) {
             pitchGauge.value = pitch
             rollGauge.value = roll
             powerGauge.value = speed
+        }
+        function onComBoxClear() {
+            comBoxModel.clear()
+        }
+        function onComPortUpdate(comPort) {
+            comBoxModel.append({text: comPort})
         }
     }
 
@@ -32,9 +38,9 @@ ApplicationWindow {
         color: "black"
         opacity: 0.8
 
-        Text { id: welcomeText; text: "Welcome Comrade"
+        Text { id: welcomeText; text: "Privyet Comrade"
             font.pixelSize: 32
-            color: "#e6ad3030"
+            color: "#CC0000"
             font.family: "Chernobyl"
             anchors.top: parent.top
             anchors.topMargin: 30
@@ -42,31 +48,6 @@ ApplicationWindow {
         }
         Text { text: "FlyatClient v0.1"; color: "gray"; font.pixelSize: 12; font.family: "Chernobyl"; padding: 5; anchors.right: parent.right; anchors.bottom: parent.bottom }
 
-        MouseArea {
-            id: mouseArea
-            anchors.fill: background
-            onClicked: {
-                colorTimer.stop()
-            }
-        }
-
-        Timer {
-            id: colorTimer
-            interval: 50
-            property double r: 0.5
-            property double g: 0.5
-            property double b: 0.5
-            onTriggered: {
-                r = r + ( Math.random() - 0.5) * 2 / 100
-                g = g + ( Math.random() - 0.5) * 2 / 100
-                b = b + ( Math.random() - 0.5) * 2 / 100
-                welcomeText.color = Qt.rgba(r, g, b, 1)
-                restart()
-            }
-            Component.onCompleted: {
-                start()
-            }
-        }
 
         GaugeSlider {
             id: pitchGauge
@@ -76,7 +57,7 @@ ApplicationWindow {
             anchors.left: parent.left
             anchors.top: parent.top
             anchors.bottom: parent.bottom
-            anchors.margins: 30
+            anchors.margins: 50
             width: 30
         }
         GaugeSlider {
@@ -87,7 +68,7 @@ ApplicationWindow {
             anchors.left: pitchGauge.right
             anchors.top: parent.top
             anchors.bottom: parent.bottom
-            anchors.margins: 30
+            anchors.margins: 50
             width: 30
         }
         GaugeSlider {
@@ -98,8 +79,77 @@ ApplicationWindow {
             anchors.left: rollGauge.right
             anchors.top: parent.top
             anchors.bottom: parent.bottom
-            anchors.margins: 30
+            anchors.margins: 50
             width: 30
+        }
+        Rectangle {
+            id: gaugeBg
+            anchors.top: pitchGauge.top
+            anchors.left: pitchGauge.left
+            anchors.bottom: pitchGauge.bottom
+            anchors.right: powerGauge.right
+            anchors.margins: -20
+            color: "white"
+            opacity: 0.2
+            radius: 5
+        }
+
+
+        ComboBox {
+            id: comBox
+            anchors.top: parent.top
+            anchors.right: parent.right
+            anchors.margins: 50
+            width: 120
+            height: 30
+            model: ListModel {
+                id: comBoxModel
+            }
+            onCurrentIndexChanged: {
+                if (comBoxModel.count > 0)
+                    backend.setComPort(comBoxModel.get(currentIndex).text)
+            }
+
+            Text {
+                id: comText
+                text: "COM port"
+                color: "white"
+                font.pixelSize: 15
+                anchors.bottom: parent.top
+                anchors.left: parent.left
+                anchors.margins: 5
+            }
+            Button {
+                anchors.right: comBox.right
+                anchors.left: comText.right
+                anchors.leftMargin: 8
+                anchors.verticalCenter: comText.verticalCenter
+                height: comText.height
+                width: height
+                background: Rectangle {
+                    id: comBoxButtonBg
+                    opacity: 0.9
+                    radius: 2
+                }
+                Text {
+                    anchors.centerIn: parent
+                    text: "Refresh"
+                }
+                onPressed: comBoxButtonBg.color = "gray"
+                onReleased:  comBoxButtonBg.color = "white"
+                onClicked: backend.refreshComPorts()
+            }
+
+            Rectangle {
+                anchors.top: comText.top
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                color: "white"
+                opacity: 0.4
+                radius: 5
+                scale: 1.2
+            }
         }
     }
 }
