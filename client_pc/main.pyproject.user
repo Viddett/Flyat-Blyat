@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 6.0.2, 2022-02-15T21:59:33. -->
+<!-- Written by QtCreator 6.0.2, 2022-02-19T13:00:01. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -139,10 +139,11 @@
     <valuelist type="QVariantList" key="CustomOutputParsers"/>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">C:/Users/Nisse/Documents/GitHub/Flyat-Blyat/client_pc/mainloop.py</value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration.C:/Users/Nisse/Documents/GitHub/Flyat-Blyat/client_pc/mainloop.py</value>
-    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">C:/Users/Nisse/Documents/GitHub/Flyat-Blyat/client_pc/mainloop.py</value>
-    <value type="QString" key="PythonEditor.RunConfiguation.Script">C:\Users\Nisse\Documents\GitHub\Flyat-Blyat\client_pc\mainloop.py</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">C:/Users/Nisse/Documents/GitHub/Flyat-Blyat/client_pc/gamepad.py</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration.C:/Users/Nisse/Documents/GitHub/Flyat-Blyat/client_pc/gamepad.py</value>
+    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">C:/Users/Nisse/Documents/GitHub/Flyat-Blyat/client_pc/gamepad.py</value>
+    <value type="QString" key="PythonEditor.RunConfiguation.Interpreter">{b602e38f-e41b-42a0-85cf-304f937a2b7b}</value>
+    <value type="QString" key="PythonEditor.RunConfiguation.Script">C:\Users\Nisse\Documents\GitHub\Flyat-Blyat\client_pc\gamepad.py</value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
@@ -156,10 +157,11 @@
     <valuelist type="QVariantList" key="CustomOutputParsers"/>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">C:/Users/Nisse/Documents/GitHub/Flyat-Blyat/client_pc/Gamepad.py</value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration.C:/Users/Nisse/Documents/GitHub/Flyat-Blyat/client_pc/Gamepad.py</value>
-    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">C:/Users/Nisse/Documents/GitHub/Flyat-Blyat/client_pc/Gamepad.py</value>
-    <value type="QString" key="PythonEditor.RunConfiguation.Script">C:\Users\Nisse\Documents\GitHub\Flyat-Blyat\client_pc\Gamepad.py</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">C:/Users/Nisse/Documents/GitHub/Flyat-Blyat/client_pc/serialCom.py</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration.C:/Users/Nisse/Documents/GitHub/Flyat-Blyat/client_pc/serialCom.py</value>
+    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">C:/Users/Nisse/Documents/GitHub/Flyat-Blyat/client_pc/serialCom.py</value>
+    <value type="QString" key="PythonEditor.RunConfiguation.Interpreter">{10026e6d-f691-4651-b877-ecccd0fce12b}</value>
+    <value type="QString" key="PythonEditor.RunConfiguation.Script">C:\Users\Nisse\Documents\GitHub\Flyat-Blyat\client_pc\serialCom.py</value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>

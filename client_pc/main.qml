@@ -1,7 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import "Widgets"
-import "Gfx"
+import "widgets"
+import "gfx"
 
 ApplicationWindow {
     id: root
@@ -16,31 +16,37 @@ ApplicationWindow {
     minimumHeight: fixedHeight
     title: "FlyatBlyat Control Centre"
 
-    property QtObject backend
+    property int globalPadding: 30
 
+    Constants { id: c }
+
+    property QtObject serialCom
     Connections {
-        target: backend
+        target: serialCom
+
         function onControlUpdate(pitch, roll, speed) {
             pitchGauge.value = pitch
             rollGauge.value = roll
             powerGauge.value = speed
         }
+
         function onComBoxClear() {
             comBoxModel.clear()
         }
+
         function onComPortUpdate(comPort) {
             comBoxModel.append({text: comPort})
         }
     }
 
-    Rectangle { id: background
+    Rectangle {
+        id: background
         anchors.fill: parent
-        color: "black"
-        opacity: 0.8
+        color: c.appBg
 
         Text { id: welcomeText; text: "Privyet Comrade"
             font.pixelSize: 32
-            color: "#CC0000"
+            color: c.sovietRed
             font.family: "Chernobyl"
             anchors.top: parent.top
             anchors.topMargin: 30
@@ -48,107 +54,109 @@ ApplicationWindow {
         }
         Text { text: "FlyatClient v0.1"; color: "gray"; font.pixelSize: 12; font.family: "Chernobyl"; padding: 5; anchors.right: parent.right; anchors.bottom: parent.bottom }
 
-
-        GaugeSlider {
-            id: pitchGauge
-            text: "Pitch"
-            from: -1
-            to: 1
-            anchors.left: parent.left
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.margins: 50
-            width: 30
-        }
-        GaugeSlider {
-            id: rollGauge
-            text: "Roll"
-            from: -1
-            to: 1
-            anchors.left: pitchGauge.right
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.margins: 50
-            width: 30
-        }
-        GaugeSlider {
-            id: powerGauge
-            text: "Power"
-            from: 0
-            to: 1
-            anchors.left: rollGauge.right
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.margins: 50
-            width: 30
-        }
         Rectangle {
             id: gaugeBg
-            anchors.top: pitchGauge.top
-            anchors.left: pitchGauge.left
-            anchors.bottom: pitchGauge.bottom
-            anchors.right: powerGauge.right
-            anchors.margins: -20
-            color: "white"
-            opacity: 0.2
+            anchors.top: parent.top
+            anchors.topMargin: globalPadding
+            anchors.left: parent.left
+            anchors.leftMargin: -radius
+            width: parent.width * 0.18
+            height: parent.height * 0.4
+            color: c.lightBlue
             radius: 5
+            GaugeSlider {
+                id: pitchGauge
+                text: "Pitch"
+                from: -1
+                to: 1
+                anchors.right: rollGauge.left
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.margins: 30
+                width: 30
+            }
+            GaugeSlider {
+                id: rollGauge
+                text: "Roll"
+                from: -1
+                to: 1
+                anchors.right: powerGauge.left
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.margins: 30
+                width: 30
+            }
+            GaugeSlider {
+                id: powerGauge
+                text: "Power"
+                from: 0
+                to: 1
+                anchors.right: parent.right
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.margins: 30
+                width: 30
+            }
         }
 
 
-        ComboBox {
-            id: comBox
+        Rectangle {
+            id: comBg
             anchors.top: parent.top
+            anchors.topMargin: globalPadding
             anchors.right: parent.right
-            anchors.margins: 50
-            width: 120
-            height: 30
-            model: ListModel {
-                id: comBoxModel
-            }
-            onCurrentIndexChanged: {
-                if (comBoxModel.count > 0)
-                    backend.setComPort(comBoxModel.get(currentIndex).text)
-            }
+            anchors.rightMargin: -radius
+            width: 180
+            height: 70
+            color: c.lightBlue
+            radius: 5
 
-            Text {
-                id: comText
-                text: "COM port"
-                color: "white"
-                font.pixelSize: 15
-                anchors.bottom: parent.top
-                anchors.left: parent.left
-                anchors.margins: 5
-            }
-            Button {
-                anchors.right: comBox.right
-                anchors.left: comText.right
-                anchors.leftMargin: 8
-                anchors.verticalCenter: comText.verticalCenter
-                height: comText.height
-                width: height
-                background: Rectangle {
-                    id: comBoxButtonBg
-                    opacity: 0.9
-                    radius: 2
-                }
-                Text {
-                    anchors.centerIn: parent
-                    text: "Refresh"
-                }
-                onPressed: comBoxButtonBg.color = "gray"
-                onReleased:  comBoxButtonBg.color = "white"
-                onClicked: backend.refreshComPorts()
-            }
-
-            Rectangle {
-                anchors.top: comText.top
-                anchors.left: parent.left
-                anchors.right: parent.right
+            ComboBox {
+                id: comBox
                 anchors.bottom: parent.bottom
-                color: "white"
-                opacity: 0.4
-                radius: 5
-                scale: 1.2
+                anchors.bottomMargin: 10
+                anchors.left: parent.left
+                anchors.margins: 10
+                width: parent.width * 0.7
+                height: 30
+                model: ListModel {
+                    id: comBoxModel
+                }
+                onCurrentIndexChanged: {
+                    if (comBoxModel.count > 0)
+                        serialCom.setComPort(comBoxModel.get(currentIndex).text)
+                }
+
+                Text {
+                    id: comText
+                    text: "COM port"
+                    color: c.lightGray
+                    font.pixelSize: 15
+                    anchors.bottom: parent.top
+                    anchors.left: parent.left
+                    anchors.margins: 5
+                }
+                Button {
+                    anchors.right: comBox.right
+                    anchors.left: comText.right
+                    anchors.leftMargin: 8
+                    anchors.verticalCenter: comText.verticalCenter
+                    height: comText.height
+                    width: height
+                    background: Rectangle {
+                        id: comBoxButtonBg
+                        radius: 2
+                        color: c.darkBlue
+                    }
+                    Text {
+                        anchors.centerIn: parent
+                        text: "Refresh"
+                        color: c.lightGray
+                    }
+                    onPressed: comBoxButtonBg.color = c.lightBlue
+                    onReleased:  comBoxButtonBg.color = c.darkBlue
+                    onClicked: serialCom.refreshComPorts()
+                }
             }
         }
     }
