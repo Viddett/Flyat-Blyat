@@ -21,6 +21,7 @@
 #define SERVO_PRIO 10
 
 #define servo_pin 10
+#define sd_pin 8
 
 SemaphoreHandle_t msg_mutex;
 RadioMsg current_msg;
