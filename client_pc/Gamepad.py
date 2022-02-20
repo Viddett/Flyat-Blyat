@@ -7,7 +7,7 @@ import time
 class XboxController(object):
     MAX_TRIG_VAL = math.pow(2, 8)
     MAX_JOY_VAL = math.pow(2, 15)
-    status = False
+    status = True
 
     def __init__(self):
 

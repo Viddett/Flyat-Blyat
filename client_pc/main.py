@@ -19,7 +19,6 @@ class Backend(QObject):
         self.serialCom = SerialCom()
 
     def setup(self):
-        engine.rootObjects()[0].setProperty('serialCom', self.serialCom)
         self.serialCom.setup()
         self.pollTimer.timeout.connect(self.poll)
         self.pollTimer.start(10)
@@ -29,5 +28,7 @@ class Backend(QObject):
 
 
 backend = Backend()
+engine.rootObjects()[0].setProperty('serialCom', backend.serialCom)
 backend.setup()
+
 sys.exit(app.exec())

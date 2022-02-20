@@ -16,6 +16,7 @@ Item {
         id: slider
         orientation: Qt.Vertical
         anchors.fill: root
+        enabled: false
         background: Rectangle {
             id: sliderBg
             width: parent.width * 0.5

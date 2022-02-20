@@ -9,7 +9,9 @@ class SerialCom(QObject):
     gamepad = XboxController()
 
     # Signals
-    controlUpdate = pyqtSignal(float, float, float)
+    pitchUpdate = pyqtSignal(float)
+    rollUpdate = pyqtSignal(float)
+    speedUpdate = pyqtSignal(float)
     comPortUpdate = pyqtSignal(str)
     comBoxClear = pyqtSignal()
     gamepadStatus = pyqtSignal(bool)
@@ -27,6 +29,7 @@ class SerialCom(QObject):
     def setComPort(self, comPort):
         self.ser = serial.Serial(comPort, 9600)
 
+
     def __init__(self):
         super().__init__()
 
@@ -35,15 +38,17 @@ class SerialCom(QObject):
 
     def poll(self):
         # GAMEPAD STUFF
-        roll, pitch, speed = self.gamepad.read()
         self.gamepadStatus.emit(self.gamepad.isConnected())
+        roll, pitch, speed = self.gamepad.read()
         # pitch, roll, speed, mode, seq (float,float,float,int,int)
         roll = float(roll)
         pitch = float(pitch)
         speed = float(speed)
         mode = 1337
         seq = 1338
-        self.controlUpdate.emit(round(pitch, 2), round(roll, 2), round(speed, 2))
+        self.pitchUpdate.emit(round(pitch, 2))
+        self.rollUpdate.emit(round(roll, 2))
+        self.speedUpdate.emit(round(speed, 2))
         # WARNING: mode and seq is 2 bytes each (short) CHECK OVERFLOW!
         if (self.ser is not None and self.ser.isOpen()):
             pkt = bytearray(struct.pack('fffhh', roll, pitch, speed, mode, seq))

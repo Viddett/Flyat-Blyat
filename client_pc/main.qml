@@ -6,14 +6,12 @@ import "gfx"
 ApplicationWindow {
     id: root
     visible: true
-    property int fixedHeight: 800
-    property int fixedWidth: 1200
-    width: fixedWidth
-    maximumWidth: fixedWidth
-    minimumWidth: fixedWidth
-    height: fixedHeight
-    maximumHeight: fixedHeight
-    minimumHeight: fixedHeight
+    width: 1200
+    maximumWidth: width
+    minimumWidth: width
+    height: 800
+    maximumHeight: height
+    minimumHeight: maximumHeight
     title: "FlyatBlyat Control Centre"
 
     property int globalPadding: 30
@@ -22,18 +20,21 @@ ApplicationWindow {
 
     property QtObject serialCom
     Connections {
+        id: backendConnection
         target: serialCom
 
-        function onControlUpdate(pitch, roll, speed) {
+        function onPitchUpdate(pitch) {
             pitchGauge.value = pitch
+        }
+        function onRollUpdate(roll) {
             rollGauge.value = roll
+        }
+        function onSpeedUpdate(speed) {
             powerGauge.value = speed
         }
-
         function onComBoxClear() {
             comBoxModel.clear()
         }
-
         function onComPortUpdate(comPort) {
             comBoxModel.append({text: comPort})
         }
@@ -176,3 +177,4 @@ ApplicationWindow {
         }
     }
 }
+
