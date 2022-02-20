@@ -70,7 +70,7 @@ void setpointFromRadio(void *pvParameters){
       Radio radio = Radio();
       while(true){
             
-            if(radio.msg_avaliable()){
+            if(radio.msg_available()){
                   xSemaphoreTake(msg_mutex,portMAX_DELAY);
                   nr_radio_msgs += 1;
                   radio.read_msg(&current_msg);

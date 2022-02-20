@@ -22,12 +22,14 @@ class Radio{
 
         //float rec_buffer[3];
 
-        void setup() {            
+        void setup() {
+
+            SPI.begin();
+
             if(_radio.begin()){
                 Serial.println("RADIO OK");
-            }
-                else{
-                    Serial.println("radio failed");
+            } else {
+                Serial.println("radio failed");
             }
             uint8_t address[][6] = {"1Node", "2Node"};
             bool radioNumber = 1; // 0 uses address[0] to transmit, 1 uses address[1] to transmit
@@ -47,7 +49,7 @@ class Radio{
             setup();
         }
 
-        bool msg_avaliable(){
+        bool msg_available(){
             // TODO
             uint8_t pipe = 0;
             return _radio.available(&pipe);// && _radio.getPayloadSize() == sizeof(RadioMsg);
