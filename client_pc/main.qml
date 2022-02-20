@@ -40,8 +40,6 @@ ApplicationWindow {
 
         function onGamepadStatus(status) {
             gamepadImage.source = status ? "gfx/xbox_gamepad_green" : "gfx/xbox_gamepad_red"
-            console.log("status", status)
-
         }
     }
 
