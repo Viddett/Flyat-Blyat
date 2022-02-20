@@ -1,0 +1,2 @@
+* Trim controls
+* Autopilot toggle
