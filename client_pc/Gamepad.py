@@ -7,6 +7,7 @@ import time
 class XboxController(object):
     MAX_TRIG_VAL = math.pow(2, 8)
     MAX_JOY_VAL = math.pow(2, 15)
+    status = False
 
     def __init__(self):
 
@@ -41,10 +42,14 @@ class XboxController(object):
         speed = self.RightTrigger
         return roll, pitch, speed
 
+    def isConnected(self):
+        return self.status
+
     def _monitor_controller(self):
         while True:
             try:
                 events = get_gamepad()
+                self.status = True
                 for event in events:
                     if event.code == 'ABS_Y':
                         self.LeftJoystickY = event.state / XboxController.MAX_JOY_VAL # normalize between -1 and 1
@@ -87,4 +92,4 @@ class XboxController(object):
                     elif event.code == 'BTN_TRIGGER_HAPPY4':
                         self.DownDPad = event.state
             except:
-                pass
+                self.status = False

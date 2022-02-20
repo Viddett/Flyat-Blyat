@@ -12,6 +12,7 @@ class SerialCom(QObject):
     controlUpdate = pyqtSignal(float, float, float)
     comPortUpdate = pyqtSignal(str)
     comBoxClear = pyqtSignal()
+    gamepadStatus = pyqtSignal(bool)
 
     # Slots
     @pyqtSlot()
@@ -35,6 +36,7 @@ class SerialCom(QObject):
     def poll(self):
         # GAMEPAD STUFF
         roll, pitch, speed = self.gamepad.read()
+        self.gamepadStatus.emit(self.gamepad.isConnected())
         # pitch, roll, speed, mode, seq (float,float,float,int,int)
         roll = float(roll)
         pitch = float(pitch)

@@ -37,6 +37,12 @@ ApplicationWindow {
         function onComPortUpdate(comPort) {
             comBoxModel.append({text: comPort})
         }
+
+        function onGamepadStatus(status) {
+            gamepadImage.source = status ? "gfx/xbox_gamepad_green" : "gfx/xbox_gamepad_red"
+            console.log("status", status)
+
+        }
     }
 
     Rectangle {
@@ -52,6 +58,7 @@ ApplicationWindow {
             anchors.topMargin: 30
             anchors.horizontalCenter: parent.horizontalCenter
         }
+
         Text { text: "FlyatClient v0.1"; color: "gray"; font.pixelSize: 12; font.family: "Chernobyl"; padding: 5; anchors.right: parent.right; anchors.bottom: parent.bottom }
 
         Rectangle {
@@ -158,6 +165,16 @@ ApplicationWindow {
                     onClicked: serialCom.refreshComPorts()
                 }
             }
+        }
+        Image {
+            id: gamepadImage
+            anchors.right: comBg.left
+            anchors.rightMargin: globalPadding
+            anchors.top: background.top
+            anchors.topMargin: globalPadding
+            fillMode: Image.PreserveAspectFit
+            height: comBg.height
+            mipmap: true
         }
     }
 }
