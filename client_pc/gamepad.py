@@ -63,10 +63,10 @@ class XboxController(object):
     def readSpeedTrim(self, stepSize):
         retVal = 0
         if self.LeftBumper != 0:
-            retVal += self.LeftBumper * stepSize
+            retVal -= self.LeftBumper * stepSize
             self.LeftBumper = 0
         if self.RightBumper != 0:
-            retVal -= self.RightBumper * stepSize
+            retVal += self.RightBumper * stepSize
             self.RightBumper = 0
 
         return retVal

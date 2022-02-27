@@ -55,16 +55,22 @@ class SerialCom(QObject):
         roll, pitch, speed = self.gamepad.read()
         self.pitchTrim += self.gamepad.readPitchTrim(0.1)
         self.rollTrim += self.gamepad.readRollTrim(0.1)
-        self.speedTrim += self.gamepad.readSpeedTrim(0.1)
+        self.speedTrim += self.gamepad.readSpeedTrim(0.05)
+
+        # print(self.speedTrim)
+        self.pitchTrim = self.rangeLim(self.pitchTrim, -1, 1)
+        self.rollTrim = self.rangeLim(self.rollTrim, -1, 1)
+        self.speedTrim = self.rangeLim(self.speedTrim, 0, 1)
+        # print(self.speedTrim)
 
         roll += self.rollTrim
         pitch += self.pitchTrim
         speed += self.speedTrim
 
         # pitch, roll, speed, mode, seq (float,float,float,int,int)
-        roll = float(roll)
-        pitch = float(pitch)
-        speed = float(speed)
+        roll = float(self.rangeLim(roll, -1, 1))
+        pitch = float(self.rangeLim(pitch, -1, 1))
+        speed = float(self.rangeLim(speed, 0, 1))
         mode = 1337
         seq = 1338
         self.pitchUpdate.emit(round(pitch, 2))
@@ -91,3 +97,11 @@ class SerialCom(QObject):
             except (OSError, serial.SerialException):
                 pass
         return result
+
+    def rangeLim(self, val, min, max):
+        if val > max:
+            return max
+        elif val < min:
+            return min
+
+        return val

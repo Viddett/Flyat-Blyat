@@ -119,7 +119,7 @@ ApplicationWindow {
             GaugeSlider {
                 id: speedGauge
                 text: "Speed"
-                from: -1
+                from: 0
                 to: 1
                 anchors.left: powerBg.left
                 anchors.top: parent.top
