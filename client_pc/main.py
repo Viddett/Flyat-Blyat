@@ -1,7 +1,7 @@
 import sys
 from serialCom import SerialCom
 
-from PyQt5.QtGui import QGuiApplication
+from PyQt5.QtGui import QGuiApplication, QIcon
 from PyQt5.QtQml import QQmlApplicationEngine
 from PyQt5.QtCore import QObject, QTimer
 

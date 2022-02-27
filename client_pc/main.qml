@@ -14,7 +14,7 @@ ApplicationWindow {
     minimumHeight: maximumHeight
     title: "FlyatBlyat Control Centre"
 
-    property int globalPadding: 30
+    property int globalMargin: 30
 
     Constants { id: c }
 
@@ -30,7 +30,7 @@ ApplicationWindow {
             rollGauge.value = roll
         }
         function onSpeedUpdate(speed) {
-            powerGauge.value = speed
+            speedGauge.value = speed
         }
         function onComBoxClear() {
             comBoxModel.clear()
@@ -38,78 +38,160 @@ ApplicationWindow {
         function onComPortUpdate(comPort) {
             comBoxModel.append({text: comPort})
         }
-
         function onGamepadStatus(status) {
             gamepadImage.source = status ? "gfx/xbox_gamepad_green" : "gfx/xbox_gamepad_red"
+        }
+        function onPitchTrimUpdate(pitchTrimValue) {
+            pitchTrim.trimValue = pitchTrimValue
+        }
+        function onRollTrimUpdate(rollTrimValue) {
+            rollTrim.trimValue = rollTrimValue
+        }
+        function onSpeedTrimUpdate(speedTrimValue) {
+            speedTrim.trimValue = speedTrimValue
         }
     }
 
     Rectangle {
         id: background
         anchors.fill: parent
-        color: c.appBg
+        color: c.darkBlue
 
-        Text { id: welcomeText; text: "Privyet Comrade"
-            font.pixelSize: 32
-            color: c.sovietRed
-            font.family: "Chernobyl"
-            anchors.top: parent.top
-            anchors.topMargin: 30
-            anchors.horizontalCenter: parent.horizontalCenter
+        Image {
+            source: "gfx/flyatblyat.png"
+            anchors.fill: parent
+            fillMode: Image.PreserveAspectFit
+            opacity: 0.1
         }
 
         Text { text: "FlyatClient v0.1"; color: "gray"; font.pixelSize: 12; font.family: "Chernobyl"; padding: 5; anchors.right: parent.right; anchors.bottom: parent.bottom }
 
+
         Rectangle {
-            id: gaugeBg
-            anchors.top: parent.top
-            anchors.topMargin: globalPadding
-            anchors.left: parent.left
-            anchors.leftMargin: -radius
-            width: parent.width * 0.18
-            height: parent.height * 0.4
+            id: pitchBg
+            anchors.top: background.top
+            anchors.topMargin: 100
+            anchors.left: background.left
+            anchors.leftMargin: 100
+            width: pitchGauge.width + speedTrim.height + 3.5 * globalMargin
+            height: 400
             color: c.lightBlue
             radius: 5
+
             GaugeSlider {
                 id: pitchGauge
                 text: "Pitch"
                 from: -1
                 to: 1
-                anchors.right: rollGauge.left
+                anchors.left: parent.left
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.margins: globalMargin
+                width: 30
+            }
+            TrimSlider {
+                id: pitchTrim
+                from: -1
+                to: 1
+                stepSize: 0.1
+                orientation: pitchTrim.vertical
+                anchors.bottom: parent.bottom
+                anchors.left: pitchGauge.right
+                anchors.margins: globalMargin
+                width: pitchGauge.height
+                height: 30
+                onTrimValueChanged: {
+                    serialCom.setTrim("pitch", trimValue)
+                }
+            }
+        }
+
+        Rectangle {
+            id: powerBg
+            anchors.top: pitchBg.top
+            anchors.left: pitchBg.right
+            anchors.leftMargin: globalMargin
+            width: speedGauge.width + speedTrim.height + 3.5 * globalMargin
+            height: 400
+            color: c.lightBlue
+            radius: 5
+
+            GaugeSlider {
+                id: speedGauge
+                text: "Speed"
+                from: -1
+                to: 1
+                anchors.left: powerBg.left
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
                 anchors.margins: 30
                 width: 30
             }
+            TrimSlider {
+                id: speedTrim
+                from: 0
+                to: 1
+                stepSize: 0.05
+                orientation: speedTrim.vertical
+                anchors.bottom: parent.bottom
+                anchors.left: speedGauge.right
+                anchors.margins: globalMargin
+                width: speedGauge.height
+                height: 30
+                onTrimValueChanged: {
+                    serialCom.setTrim("speed", trimValue)
+                }
+            }
+        }
+        Rectangle {
+            id: rollBg
+            anchors.top: pitchBg.bottom
+            anchors.topMargin: globalMargin
+            anchors.left: pitchBg.left
+            anchors.right: powerBg.right
+            height: rollGauge.width + rollTrim.height + 3 * globalMargin
+            color: c.lightBlue
+            radius: 5
+
             GaugeSlider {
                 id: rollGauge
                 text: "Roll"
                 from: -1
                 to: 1
-                anchors.right: powerGauge.left
+                anchors.left: rollBg.left
+                anchors.leftMargin: height
                 anchors.top: parent.top
-                anchors.bottom: parent.bottom
+                height: rollBg.width - 2 * globalMargin
                 anchors.margins: 30
                 width: 30
+                transform: Rotation {
+                    origin.x: rollGauge.width / 2
+                    origin.y: rollGauge.width / 2
+                    angle: 90
+                }
             }
-            GaugeSlider {
-                id: powerGauge
-                text: "Power"
-                from: 0
+            TrimSlider {
+                id: rollTrim
+                from: -1
                 to: 1
-                anchors.right: parent.right
-                anchors.top: parent.top
+                stepSize: 0.1
+                orientation: rollTrim.horizontal
                 anchors.bottom: parent.bottom
-                anchors.margins: 30
-                width: 30
+                anchors.bottomMargin: 1.5 * globalMargin
+                anchors.left: parent.left
+                anchors.margins: globalMargin
+                width: rollGauge.height
+                height: 30
+                onTrimValueChanged: {
+                    serialCom.setTrim("roll", trimValue)
+                }
             }
         }
-
 
         Rectangle {
             id: comBg
             anchors.top: parent.top
-            anchors.topMargin: globalPadding
+            anchors.topMargin: globalMargin
             anchors.right: parent.right
             anchors.rightMargin: -radius
             width: 180
@@ -168,9 +250,9 @@ ApplicationWindow {
         Image {
             id: gamepadImage
             anchors.right: comBg.left
-            anchors.rightMargin: globalPadding
+            anchors.rightMargin: globalMargin
             anchors.top: background.top
-            anchors.topMargin: globalPadding
+            anchors.topMargin: globalMargin
             fillMode: Image.PreserveAspectFit
             height: comBg.height
             mipmap: true

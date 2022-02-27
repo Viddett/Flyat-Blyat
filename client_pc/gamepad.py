@@ -31,6 +31,8 @@ class XboxController(object):
         self.RightDPad = 0
         self.UpDPad = 0
         self.DownDPad = 0
+        self.DPadX = 0
+        self.DPadY = 0
 
         self._monitor_thread = threading.Thread(target=self._monitor_controller, args=())
         self._monitor_thread.daemon = True
@@ -41,6 +43,33 @@ class XboxController(object):
         pitch = self.LeftJoystickY
         speed = self.RightTrigger
         return roll, pitch, speed
+
+    def readPitchTrim(self, stepSize):
+        retVal = 0
+        if self.DPadY != 0:
+            retVal = -self.DPadY * stepSize
+            self.DPadY = 0
+
+        return retVal
+
+    def readRollTrim(self, stepSize):
+        retVal = 0
+        if self.DPadX != 0:
+            retVal = self.DPadX * stepSize
+            self.DPadX = 0
+
+        return retVal
+
+    def readSpeedTrim(self, stepSize):
+        retVal = 0
+        if self.LeftBumper != 0:
+            retVal += self.LeftBumper * stepSize
+            self.LeftBumper = 0
+        if self.RightBumper != 0:
+            retVal -= self.RightBumper * stepSize
+            self.RightBumper = 0
+
+        return retVal
 
     def isConnected(self):
         return self.status
@@ -83,13 +112,9 @@ class XboxController(object):
                         self.Back = event.state
                     elif event.code == 'BTN_START':
                         self.Start = event.state
-                    elif event.code == 'BTN_TRIGGER_HAPPY1':
-                        self.LeftDPad = event.state
-                    elif event.code == 'BTN_TRIGGER_HAPPY2':
-                        self.RightDPad = event.state
-                    elif event.code == 'BTN_TRIGGER_HAPPY3':
-                        self.UpDPad = event.state
-                    elif event.code == 'BTN_TRIGGER_HAPPY4':
-                        self.DownDPad = event.state
+                    elif event.code == 'ABS_HAT0X':
+                        self.DPadX = event.state
+                    elif event.code == 'ABS_HAT0Y':
+                        self.DPadY = event.state
             except:
                 self.status = False
