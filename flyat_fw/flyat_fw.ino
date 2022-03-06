@@ -1,14 +1,18 @@
 
-#include <Arduino_FreeRTOS.h>
-#include <semphr.h>
-#include <SPI.h>
+#include <Arduino_FreeRTOS.h> //9500 byte
+#include <semphr.h> // 0 byte
+#include <SPI.h> // 0 byte
 
-#include "imu.cpp"
+#include "imu.cpp"  // imu + radio + fbservo circus 7000byte
 #include "radio.cpp"
 #include "fbservo.cpp"
 //#include "control.cpp"
+#include "sd.cpp" //8000 byte..
 
-#include <Servo.h>
+#include <Servo.h>  //500 byte
+
+//Total limit is 28K on Micro
+//Objects seem to add alot
 
 #define RADIO_TS_MS_MS 5
 #define CTRL_TS_MS 50
@@ -29,6 +33,7 @@ int servo_val = 0; // 0 - 100
 
 int nr_radio_msgs = 0;
 Servo servo;
+SDcard sdcard = SDcard(sd_pin);
 
 void setup() {
       
@@ -53,6 +58,8 @@ void setup() {
 
       msg_mutex = xSemaphoreCreateMutex();
 
+     
+
 
       /**
        Create tasks
@@ -74,6 +81,8 @@ void setpointFromRadio(void *pvParameters){
                   xSemaphoreTake(msg_mutex,portMAX_DELAY);
                   nr_radio_msgs += 1;
                   radio.read_msg(&current_msg);
+                  // sdcard.logWrite(String(current_msg.pitch));
+                  sdcard.logRead();
                   xSemaphoreGive(msg_mutex);
                   //Serial.print("RADIO MSG: ");
             }
@@ -81,7 +90,6 @@ void setpointFromRadio(void *pvParameters){
             //Serial.println("RADIO LOOP");
             //vTaskDelay(RADIO_TS_MS / portTICK_PERIOD_MS);
       }
-      
 }
 
 
