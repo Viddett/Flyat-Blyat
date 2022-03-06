@@ -54,6 +54,9 @@ Column {
                     visible: radioButton.checked
                 }
             }
+            onClicked: {
+                currentIndex = index
+            }
         }
     }
 }

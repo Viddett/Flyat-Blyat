@@ -269,7 +269,7 @@ ApplicationWindow {
             rowHeight: 30
             spacing: globalMargin / 2
             onCurrentIndexChanged: {
-                console.log("Selected row", rowNames[currentIndex])
+                console.log("Selected button:", rowNames[currentIndex])
             }
         }
     }
