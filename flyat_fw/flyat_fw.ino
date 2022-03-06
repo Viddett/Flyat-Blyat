@@ -6,7 +6,7 @@
 #include "imu.cpp"
 #include "radio.cpp"
 #include "fbservo.cpp"
-//#include "control.cpp"
+// #include "control.cpp"
 
 #include <Servo.h>
 
@@ -112,13 +112,12 @@ void attitudeCtrl(void *pvParameters){
       IMU imu = IMU();
       ImuMeas meas;
       RadioMsg internalMsg;
-      /*
-      FBServo ailLeft = FBServo(1);
-      FBServo ailRight = FBServo(2);
-      FBServo prop = FBServo(3);
-
-      Control ctrl = Control(&ailLeft, &ailRight, &prop);
-      */
+      
+      // FBServo ailLeft = FBServo(1);
+      // FBServo ailRight = FBServo(2);
+      // FBServo prop = FBServo(3);
+      // Control ctrl = Control(&ailLeft, &ailRight, &prop);
+      
       while(true){
             
             //imu.read(&meas);
