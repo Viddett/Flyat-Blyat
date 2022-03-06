@@ -247,6 +247,7 @@ ApplicationWindow {
                 }
             }
         }
+
         Image {
             id: gamepadImage
             anchors.right: comBg.left
@@ -257,6 +258,22 @@ ApplicationWindow {
             height: comBg.height
             mipmap: true
         }
+
+        FBradioButtonColumn {
+            id: modeColumn
+            anchors.top: comBg.bottom
+            anchors.topMargin: globalMargin
+            anchors.left: comBg.left
+            title: "Flight Mode:"
+            rowNames: ["Auto", "Manual"]
+            rowHeight: 30
+            spacing: globalMargin / 2
+            onCurrentIndexChanged: {
+                console.log("Selected row", rowNames[currentIndex])
+            }
+        }
     }
+
+
 }
 

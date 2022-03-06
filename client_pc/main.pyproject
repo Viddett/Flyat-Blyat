@@ -1,3 +1,3 @@
 {
-    "files": ["widgets/GaugeSlider.qml","widgets/Constants.qml","main.qml","main.py","gamepad.py","serialCom.py","GaugeSlider.qml","widgets/TrimSlider.qml"]
+    "files": ["widgets/FBradioButtonColumn.qml","main.qml","serialCom.py","widgets/GaugeSlider.qml","main.py","widgets/Constants.qml","GaugeSlider.qml","widgets/TrimSlider.qml","gamepad.py"]
 }
