@@ -12,7 +12,7 @@ typedef struct {
 } RadioMsg;
 
 // Radio parameters
-RF24 radio(7, 8); // using pin 7 for the CE pin, and pin 8 for the CSN pin
+RF24 radio(11, 12); // using pin 7 for the CE pin, and pin 8 for the CSN pin
 uint8_t address[][6] = {"1Node", "2Node"}; // Let these addresses be used for the pair
 bool radioNumber = 0; // 0 uses address[0] to transmit, 1 uses address[1] to transmit
 bool role = true;  // true = TX role, false = RX role
