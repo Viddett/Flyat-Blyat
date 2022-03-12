@@ -7,6 +7,16 @@ Column {
     property variant rowNames: ["row1", "row2", "row3"]
     property string title: "Title"
     property int currentIndex: 0
+    property string currentChoice: ""
+    property int defaultIndex: 0
+
+    signal buttonClicked
+    function setButton(repeaterIndex) {
+        console.log("setBtn", repeaterIndex)
+        currentIndex = repeaterIndex
+        currentChoice = rowNames[repeaterIndex]
+        buttonClicked()
+    }
 
     Text {
         text: rootCol.title
@@ -55,8 +65,14 @@ Column {
                 }
             }
             onClicked: {
-                currentIndex = index
+                console.log("rep click", index)
+                setButton(index)
             }
+        }
+        Component.onCompleted: {
+            console.log("cmpl", defaultIndex)
+            rootRepeater.itemAt(defaultIndex).checked = true
+            setButton(defaultIndex)
         }
     }
 }

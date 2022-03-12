@@ -1,1 +1,1 @@
-* 
+* Starting without gamepad connected makes client slow

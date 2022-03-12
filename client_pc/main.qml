@@ -265,11 +265,12 @@ ApplicationWindow {
             anchors.topMargin: globalMargin
             anchors.left: comBg.left
             title: "Flight Mode:"
-            rowNames: ["Auto", "Manual"]
+            rowNames: ["Manual", "Auto"]
             rowHeight: 30
             spacing: globalMargin / 2
-            onCurrentIndexChanged: {
-                console.log("Selected button:", rowNames[currentIndex])
+            onButtonClicked: {
+                console.log("main", currentChoice, currentIndex)
+                serialCom.setFlightMode(currentChoice)
             }
         }
     }
