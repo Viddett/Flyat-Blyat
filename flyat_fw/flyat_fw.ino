@@ -7,7 +7,7 @@
 #include "radio.cpp"
 #include "fbservo.cpp"
 //#include "control.cpp"
-#include "sd.cpp" //8000 byte..
+#include "flyatsd.h" //8000 byte..
 
 #include <Servo.h>  //500 byte
 
@@ -35,7 +35,6 @@ int servo_val = 0; // 0 - 100
 
 int nr_radio_msgs = 0;
 Servo servo;
-SDcard sdcard = SDcard(sd_pin);
 
 void setup() {
       
@@ -61,6 +60,8 @@ void setup() {
 
       msg_mutex = xSemaphoreCreateMutex();
 
+      sdSetup(sd_pin);
+
       /**
        Create tasks
       */
@@ -80,7 +81,7 @@ void setpointFromRadio(void *pvParameters){
                   xSemaphoreTake(msg_mutex,portMAX_DELAY);
                   nr_radio_msgs += 1;
                   radio.read_msg(&current_msg);
-                  // sdcard.logWrite(String(current_msg.pitch));
+                  sdLogWrite(String(current_msg.pitch));
                   xSemaphoreGive(msg_mutex);
                   #ifdef debug
                   Serial.print("RADIO MSG: ");
