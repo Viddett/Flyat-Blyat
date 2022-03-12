@@ -27,6 +27,8 @@
 #define servo_pin 10
 #define sd_pin 8
 
+// #define debug    //enable all debug prints
+
 SemaphoreHandle_t msg_mutex;
 RadioMsg current_msg;
 int servo_val = 0; // 0 - 100
@@ -44,7 +46,7 @@ void setup() {
       Serial.begin(115200);
 
       for(int i=0;i<5;i++){
-            delay(1000);
+          delay(1000);
       }
       servo.write(90);
 
@@ -52,14 +54,12 @@ void setup() {
 
       //servo.attach(servo_pin, 1000, 2000);
 
-
+      #ifdef debug
       Serial.println("LETSGO");
       Serial.println(sizeof(RadioMsg));
+      #endif 
 
       msg_mutex = xSemaphoreCreateMutex();
-
-     
-
 
       /**
        Create tasks
@@ -67,7 +67,6 @@ void setup() {
       xTaskCreate(setpointFromRadio, "RadioTask", TASK_STACK_DPTH,nullptr, RADIO_PRIO, NULL);
       xTaskCreate(attitudeCtrl, "CtrlTask", TASK_STACK_DPTH, nullptr, CTRL_PRIO, NULL);
       //xTaskCreate(servo_task, "SERVO_TASK", TASK_STACK_DPTH, nullptr, SERVO_PRIO, NULL);
-
 }
 
 void loop() {}
@@ -76,18 +75,21 @@ void setpointFromRadio(void *pvParameters){
 
       Radio radio = Radio();
       while(true){
-            
+
             if(radio.msg_available()){
                   xSemaphoreTake(msg_mutex,portMAX_DELAY);
                   nr_radio_msgs += 1;
                   radio.read_msg(&current_msg);
                   // sdcard.logWrite(String(current_msg.pitch));
-                  sdcard.logRead();
                   xSemaphoreGive(msg_mutex);
-                  //Serial.print("RADIO MSG: ");
+                  #ifdef debug
+                  Serial.print("RADIO MSG: ");
+                  #endif
             }
             
-            //Serial.println("RADIO LOOP");
+            #ifdef debug
+            Serial.println("RADIO LOOP");
+            #endif
             //vTaskDelay(RADIO_TS_MS / portTICK_PERIOD_MS);
       }
 }
@@ -138,24 +140,26 @@ void attitudeCtrl(void *pvParameters){
             }
             servo.write((internalMsg.roll + 1)*90.0);
             
-            //Serial.print(nr_radio_msgs);
-            nr_radio_msgs = 0 ;
+            #ifdef debug
+            Serial.print(nr_radio_msgs);
             Serial.print(" ");
             Serial.print(internalMsg.pitch);
             Serial.print(" ");
             Serial.print(internalMsg.roll);
             Serial.print(" ");
             Serial.print(internalMsg.speed);
-			
-			Serial.print(" ");
+		Serial.print(" ");
             Serial.print(internalMsg.mode);
-			
-			Serial.print(" ");
+		Serial.print(" ");
             Serial.println(internalMsg.seq);
+            #endif
 
+            nr_radio_msgs = 0;
             //ctrl.step(internalMsg,meas);
             
-            //Serial.println("Ctrl LOOP");
+            #ifdef debug
+            Serial.println("Ctrl LOOP");
+            #endif
             vTaskDelay(CTRL_TS_MS / portTICK_PERIOD_MS);
       }
 

@@ -27,9 +27,11 @@ class Radio{
             SPI.begin();
 
             if(_radio.begin()){
+                #ifdef debug 
                 Serial.println("RADIO OK");
             } else {
                 Serial.println("radio failed");
+                #endif
             }
             uint8_t address[][6] = {"1Node", "2Node"};
             bool radioNumber = 1; // 0 uses address[0] to transmit, 1 uses address[1] to transmit
